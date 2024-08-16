@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { Container, TextField, Button, Box, Paper } from '@mui/material';
+import users from '../data/users.json';
+import { useAuthStore } from '../store/useAuthStore';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter();
+    const login = useAuthStore(state => state.login);
 
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log('Email:', email);
-        console.log('Password:', password);
+
+        const user = users.find(u => u.email === email && u.password === password);
+
+        if (user) {
+            login(user);
+            router.push(`/profile/${user.id}`);
+        } else {
+            alert('Invalid email or password');
+        }
     };
 
     return (
