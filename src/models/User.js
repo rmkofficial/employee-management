@@ -15,6 +15,18 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide a password'],
     },
+    phone: {
+        type: String,
+    },
+    address: {
+        type: String,
+    },
+    emergencyContact: {
+        type: String,
+    },
+    birthDate: {
+        type: Date,
+    },
     role: {
         type: String,
         enum: ['User', 'Admin'],

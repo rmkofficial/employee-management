@@ -14,6 +14,11 @@ export async function getServerSideProps({ params }) {
 export default function Profile({ user }) {
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
+    const [phone, setPhone] = useState(user.phone || '');
+    const [address, setAddress] = useState(user.address || '');
+    const [emergencyContact, setEmergencyContact] = useState(user.emergencyContact || '');
+    const [birthDate, setBirthDate] = useState(user.birthDate ? user.birthDate.split('T')[0] : '');
+    const [password, setPassword] = useState('');
     const router = useRouter();
     const logout = useAuthStore((state) => state.logout);
 
@@ -29,13 +34,22 @@ export default function Profile({ user }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email }),
+                body: JSON.stringify({
+                    name,
+                    phone,
+                    address,
+                    emergencyContact,
+                    birthDate,
+                    password: password ? password : undefined,
+                }),
             });
+
+            const data = await res.json();
 
             if (res.ok) {
                 alert('Profile updated successfully');
             } else {
-                alert('Failed to update profile');
+                alert(`Failed to update profile: ${data.message || 'Unknown error'}`);
             }
         } catch (error) {
             console.error('Failed to update profile', error);
@@ -61,7 +75,50 @@ export default function Profile({ user }) {
                         label="Email"
                         fullWidth
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        margin="normal"
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        style={{ backgroundColor: '#f5f5f5' }}
+                    />
+                    <TextField
+                        label="Phone Number"
+                        fullWidth
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        margin="normal"
+                    />
+                    <TextField
+                        label="Address"
+                        fullWidth
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        margin="normal"
+                    />
+                    <TextField
+                        label="Emergency Contact"
+                        fullWidth
+                        value={emergencyContact}
+                        onChange={(e) => setEmergencyContact(e.target.value)}
+                        margin="normal"
+                    />
+                    <TextField
+                        label="Birth Date"
+                        type="date"
+                        fullWidth
+                        value={birthDate}
+                        onChange={(e) => setBirthDate(e.target.value)}
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextField
+                        label="New Password"
+                        type="password"
+                        fullWidth
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         margin="normal"
                     />
                     <Button variant="contained" color="primary" fullWidth onClick={handleSave} style={{ marginTop: '16px' }}>
