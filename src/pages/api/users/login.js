@@ -1,5 +1,6 @@
 import dbConnect from '../../../lib/mongodb';
 import User from '../../../models/User';
+import bcrypt from 'bcryptjs';
 
 export default async function handler(req, res) {
     const { method } = req;
@@ -17,7 +18,9 @@ export default async function handler(req, res) {
             }
 
             
-            if (password !== user.password) {
+            const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+            if (!isPasswordMatch) {
                 return res.status(400).json({ message: 'Invalid email or password' });
             }
 

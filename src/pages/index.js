@@ -1,6 +1,6 @@
 import React from 'react';
-import Login from '../components/Login';
+import AuthForm from '../components/AuthForm';
 
 export default function Home() {
-  return <Login />;
+  return <AuthForm />;
 }
