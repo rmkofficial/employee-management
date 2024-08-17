@@ -2,27 +2,28 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Container, TextField, Button, Box, Paper, Typography } from '@mui/material';
 
-export default function AdminLogin() {
+export default function AdminSignup() {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
 
-    const handleLogin = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
 
-        const res = await fetch('/api/admins/login', {
+        const res = await fetch('/api/admins/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ name, email, password }),
         });
 
         if (res.ok) {
-            const admin = await res.json();
-            router.push(`/admin-dashboard/${admin._id}`);
+            alert('Signup successful! Please login.');
+            router.push('/admin-login');
         } else {
-            alert('Invalid email or password');
+            alert('Signup failed. Please try again.');
         }
     };
 
@@ -38,9 +39,17 @@ export default function AdminLogin() {
             >
                 <Paper elevation={3} style={{ padding: '20px', width: '100%', maxWidth: '400px' }}>
                     <Typography variant="h5" align="center" gutterBottom>
-                        Admin Login
+                        Admin Signup
                     </Typography>
-                    <form onSubmit={handleLogin}>
+                    <form onSubmit={handleSignup}>
+                        <TextField
+                            label="Name"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
                         <TextField
                             label="Email"
                             variant="outlined"
@@ -59,18 +68,9 @@ export default function AdminLogin() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <Button type="submit" variant="contained" color="primary" fullWidth style={{ marginTop: '16px' }}>
-                            Login
+                            Signup
                         </Button>
                     </form>
-                    <Button
-                        variant="text"
-                        color="primary"
-                        onClick={() => router.push('/admin-signup')}
-                        style={{ marginTop: '16px' }}
-                    >
-                        Don&apos;t have an account? Signup here
-                    </Button>
-
                 </Paper>
             </Box>
         </Container>
