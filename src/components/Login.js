@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Container, TextField, Button, Box, Paper } from '@mui/material';
-import users from '../data/users.json';
 import { useAuthStore } from '../store/useAuthStore';
 
 export default function Login() {
@@ -10,14 +9,21 @@ export default function Login() {
     const router = useRouter();
     const login = useAuthStore(state => state.login);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
-        const user = users.find(u => u.email === email && u.password === password);
+        const res = await fetch('/api/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
 
-        if (user) {
+        if (res.ok) {
+            const user = await res.json();
             login(user);
-            router.push(`/profile/${user.id}`);
+            router.push(`/profile/${user._id}`);
         } else {
             alert('Invalid email or password');
         }
