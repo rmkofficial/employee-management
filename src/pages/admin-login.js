@@ -62,15 +62,6 @@ export default function AdminLogin() {
                             Login
                         </Button>
                     </form>
-                    <Button
-                        variant="text"
-                        color="primary"
-                        onClick={() => router.push('/admin-signup')}
-                        style={{ marginTop: '16px' }}
-                    >
-                        Don&apos;t have an account? Signup here
-                    </Button>
-
                 </Paper>
             </Box>
         </Container>
