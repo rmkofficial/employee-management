@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Typography, Box, Paper, List, ListItem, ListItemText, Modal, Button, TextField } from '@mui/material';
+import { Container, Typography, Box, Paper, List, ListItem, ListItemText } from '@mui/material';
 import dbConnect from '../../lib/mongodb';
 import User from '../../models/User';
+import UserDetailsModal from '../../components/UserDetailsModal';
 
 export async function getServerSideProps(context) {
     await dbConnect();
@@ -85,80 +86,13 @@ export default function AdminDashboard({ users: initialUsers }) {
                     </List>
                 </Paper>
             </Box>
-            <Modal
+            <UserDetailsModal
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="user-details-title"
-                aria-describedby="user-details-description"
-            >
-                <Box
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 400,
-                        backgroundColor: 'white',
-                        border: '2px solid #000',
-                        boxShadow: 24,
-                        padding: 20,
-                    }}
-                >
-                    <Typography id="user-details-title" variant="h6" component="h2">
-                        User Details
-                    </Typography>
-                    {selectedUser && (
-                        <div>
-                            <TextField
-                                label="Name"
-                                name="name"
-                                fullWidth
-                                value={updatedUser.name || ''}
-                                onChange={handleChange}
-                                margin="normal"
-                            />
-                            <TextField
-                                label="Email"
-                                name="email"
-                                fullWidth
-                                value={updatedUser.email || ''}
-                                onChange={handleChange}
-                                margin="normal"
-                            />
-                            <TextField
-                                label="Role"
-                                name="role"
-                                fullWidth
-                                value={updatedUser.role || ''}
-                                onChange={handleChange}
-                                margin="normal"
-                            />
-                            <TextField
-                                label="Phone"
-                                name="phone"
-                                fullWidth
-                                value={updatedUser.phone || ''}
-                                onChange={handleChange}
-                                margin="normal"
-                            />
-                            <TextField
-                                label="Address"
-                                name="address"
-                                fullWidth
-                                value={updatedUser.address || ''}
-                                onChange={handleChange}
-                                margin="normal"
-                            />
-                        </div>
-                    )}
-                    <Button variant="contained" color="primary" onClick={handleSave} style={{ marginTop: '16px' }}>
-                        Save
-                    </Button>
-                    <Button variant="contained" color="secondary" onClick={handleClose} style={{ marginTop: '16px' }}>
-                        Close
-                    </Button>
-                </Box>
-            </Modal>
+                user={updatedUser}
+                onChange={handleChange}
+                onSave={handleSave}
+            />
         </Container>
     );
 }
