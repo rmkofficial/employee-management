@@ -19,7 +19,7 @@ Bu projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izley
 ### 1. Depoyu Klonlayın
 
 ```bash
-git clone https://github.com/kullaniciAdi/calisan-yonetim-sistemi.git
+git clone https://github.com/rmkofficial/employee-management
 cd calisan-yonetim-sistemi
 ```
 
